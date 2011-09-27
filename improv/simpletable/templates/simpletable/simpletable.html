@@ -1,0 +1,23 @@
+{% extends "simpletable/simpletable_base.html" %}
+
+{% block content_well %}
+{% if display.page_title %}<h1>{{display.page_title}}</h1>{% endif %}
+{% if display.leadin %}<p>{{display.leadin}}</p>{% endif %}
+<table>
+    <thead><tr>
+    {% for th in proxy.fields.all %}
+        <th>{{th}}</th>
+    {% endfor %}
+    </tr></thead>
+    
+    <tbody>
+    {% for row in rows %}
+    <tr>
+        {% for key, val in row.items %}
+        <td>{{val}}</td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock content_well %}

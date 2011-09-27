@@ -1,0 +1,7 @@
+An experimental Django project to deploy data from csvs onto the internet without requiring expensive programming.
+
+This may work or it may not! Key features about what we're trying:
+* We want to use Django's powerful template language within the admin site, to make it really easy to lay out a page. This is also a clever trick to help your web producers learn Django (at least the templating).
+* Django models can be generated dynamically, in memory, based on meta-data stored in the database. Those models can be sync'd themselves into the database with south. (In this case, we're just using south as a pretty version of syncdb, but that's OK, because south's internal API *is* prettier than syncdb's internal API.)
+* Being able to _change data over time_ is not as important as being able to easily upload/replace. (That's good, because *changing* data with south is a lot harder than just syncing a database into place.)
+* Since this is a database-backed solution (not a javascript/json gig), we should be able to handle really-big datasets. But that's not a key feature for version 1; most data that newspapers want to publish is pretty small (a few thousand rows), so let's start there.
