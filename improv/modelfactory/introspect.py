@@ -95,4 +95,4 @@ def introspect_row(sniffer, row):
     for row in DictReader(f):
         for (key, val) in row.items():
             sniffer.set_col(key, val)
-        rc += 1
+            
