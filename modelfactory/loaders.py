@@ -72,7 +72,7 @@ def load_csv(model, filename, fields, repl={}):
     f.close()
     
 def load_row(model, row, fields, repl={}):
-    obj = model.pymodel()
+    obj = model.actual()
     
     for (key, val) in row.items():
         if key in repl:

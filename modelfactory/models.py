@@ -24,7 +24,7 @@ class DynamicModel(models.Model):
         return res
     
     @property
-    def pymodel(self):
+    def actual(self):
         """
         Based on this model's name, attached fields and settings, dynamically
         creates an in-memory Model class, which can be queried and manipulated
@@ -40,7 +40,7 @@ class DynamicModel(models.Model):
     ####################################
     
     def create_table(self):
-        model = self.pymodel
+        model = self.actual
         
         fields = []
         for field in model._meta.fields:
@@ -49,7 +49,7 @@ class DynamicModel(models.Model):
         return southdb.create_table(model._meta.db_table, fields)
     
     def drop_table(self):
-        model = self.pymodel
+        model = self.actual
         return southdb.delete_table(model._meta.db_table, cascade=True)
     
     def table_exists(self):

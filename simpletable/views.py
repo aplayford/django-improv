@@ -7,7 +7,7 @@ def render_table(request, slug):
     
     table = get_object_or_404(SimpleTable, slug=slug, active=True)
     dynamic_model = table.dataset
-    actual_model = dynamic_model.pymodel
+    actual_model = dynamic_model.actual
     
     varsContext = {
         'display': table,
