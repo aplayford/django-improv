@@ -54,7 +54,7 @@ class DynamicModel(models.Model):
     
     def table_exists(self):
         cursor = connection.cursor()
-        return self.pymodel._meta.db_table in connection.introspection.get_table_list(cursor)
+        return self.actual._meta.db_table in connection.introspection.get_table_list(cursor)
     
     def reset_table(self):
         if self.table_exists():
