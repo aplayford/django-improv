@@ -3,6 +3,7 @@ from modelfactory.models import DynamicModel, DynamicField
 from django.template.defaultfilters import slugify
 
 import codecs
+from csv import DictReader
 
 ## TODOs:
 ## 1) Fix error that would come if two fieldify() fields created an overlap.
@@ -16,7 +17,6 @@ class Cast(object):
         self.type = type
     
     def clean(self, v):
-        print("clean cast %s, type: %s, type(v): %s" % (v, self.type, type(v)))
         try:
             return getattr(self, self.type.lower())(v)
         except AttributeError:
@@ -62,8 +62,6 @@ def load_and_introspect_csv(filename, model_name, repl={}, overwrite=True):
     load_csv(model, filename, fields, repl)
 
 def load_csv(model, filename, fields, repl={}):
-    from csv import DictReader
-    
     f = codecs.open(filename)
     
     for row in DictReader(f):

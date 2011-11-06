@@ -1,7 +1,6 @@
 import re
 from csv import DictReader
 
-
 class Introspector(object):
     def __init__(self):
         self.cols = {}
@@ -75,7 +74,6 @@ class Introspector(object):
             return False
     
 def introspect_csv(filename, limit=200):
-    
     sniffer = Introspector()
     
     row_counter = 0
@@ -91,4 +89,4 @@ def introspect_csv(filename, limit=200):
 def introspect_row(sniffer, row):
     for (key, val) in row.items():
         sniffer.set_col(key, val)
-            
+

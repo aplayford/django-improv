@@ -3,8 +3,11 @@ from django.core.validators import RegexValidator
 
 from south.db import db as southdb
 
-from modelfactory.utils import create_pymodel
 from modelfactory.supported_fields import DYN_FIELD_TYPES, DYN_FIELD_DEFAULTS
+
+###################
+## Actual models ##
+###################
 
 class DynamicModel(models.Model):
     ############
@@ -16,11 +19,10 @@ class DynamicModel(models.Model):
     #############
     ## Getters ##
     #############
-    @property
-    def field_list(self):
+    def fields_actual(self):
         res = {}
         for field in self.fields.all():
-            res[field.column_name] = field.pyfield
+            res[field.column_name] = field.dynamic_field
         return res
     
     @property
@@ -31,9 +33,17 @@ class DynamicModel(models.Model):
         like any other Django model.
         """
         
-        return create_pymodel(str(self.name), self.field_list,
-                              app_label="dynamic_store",
-                              module="database.dynamic_store")
+        dynamic = {
+            'dynamic_fields': dict([(f.column_name, f) for f in self.fields.all()])
+        }
+        
+        return instance_dynamic_model(
+            str(self.name),
+            self.fields_actual(),
+            "dynamic_store",
+            "database.dynamic_store",
+            dynamic,
+        )
     
     ####################################
     ## Database manipulation methods. ##
@@ -81,7 +91,7 @@ class DynamicField(models.Model):
     field_settings = models.TextField(max_length=200, blank=True)
     
     @property
-    def pyfield(self):
+    def dynamic_field(self):
         field_type = self.get_field_type_display()
         
         settings = {}
@@ -98,3 +108,64 @@ class DynamicField(models.Model):
     
     class Meta:
         unique_together = ('model', 'column_name',)
+
+
+###########################
+## Dynamic model support ##
+###########################
+
+class DynamicModelManager(models.Manager):
+    def row_iterator(self, exclude=[]):
+        for row in self.iterator():
+            rowdata = {}
+            for val in self.model._meta.fields:
+                if not val in exclude:
+                    rowname = val.name
+                    rowdata[rowname] = getattr(row, rowname)
+            yield rowdata
+
+class DynamicModelBase(models.Model):
+    """
+    All dynamically created models inherit from this.
+    """
+    objects = DynamicModelManager()
+    
+    def __unicode__(self):
+        if hasattr(self, "magic_box"):
+            return getattr(self, self.magic_box['unicode_val'])
+    
+    class Meta:
+        abstract = True
+
+def instance_dynamic_model(name, fields, app_label, module, dynamic_data=None, options=None, admin_options=None):
+    """
+    Using metadata that describes a model, instance it in-memory.
+    
+    Code based on
+    http://code.djangoproject.com/wiki/DynamicModels.
+    """
+    class Meta:
+        pass # Using type('Meta', ...) gives a dictproxy error during model creation
+    setattr(Meta, 'app_label', app_label)
+    
+    # Update Meta with any options that were provided
+    if options is not None:
+        for key, value in options.iteritems():
+            setattr(Meta, key, value)
+    
+    # Set up a dictionary to simulate declarations within a class
+    attrs = {'__module__': module, 'Meta': Meta, 'Dynamic': dynamic_data}
+    attrs.update(fields) # Add fields
+    
+    # Create the class, which automatically triggers ModelBase processing
+    model = type(name, (DynamicModelBase,), attrs)
+    
+    # Create an Admin class if admin options were provided
+    if admin_options is not None:
+        class Admin(admin.ModelAdmin):
+            pass
+        for key, value in admin_options:
+            setattr(Admin, key, value)
+        admin.site.register(model, Admin)
+    
+    return model
