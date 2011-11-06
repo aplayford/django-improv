@@ -5,27 +5,3 @@ This may work or it may not! Key features about what we're trying:
 * Django models can be generated dynamically, in memory, based on meta-data stored in the database. Those models can be sync'd themselves into the database with south. (In this case, we're just using south as a pretty version of syncdb, but that's OK, because south's internal API *is* prettier than syncdb's internal API.)
 * Being able to _change data over time_ is not as important as being able to easily upload/replace. (That's good, because *changing* data with south is a lot harder than just syncing a database into place.)
 * Since this is a database-backed solution (not a javascript/json gig), we should be able to handle really-big datasets. But that's not a key feature for version 1; most data that newspapers want to publish is pretty small (a few thousand rows), so let's start there.
-
-
-
-======= Notes =======
-(These are not all in English yet, but I'll work on it.)
-
-
->>>> BIG QUESTION:
->>>>>> How does SimpleTable/SimpleColumn interact with DisplayFormatter? What I've outlined below works if visible
->>>>>> is a formatter, but should it be? Are formatters per-field, or are they special generic objects? If 
->>>>>> the latter, much of this bootstrapping needs to become per-field.
->>>>>>
->>>>>> What's key, I think, is whether the save() mechinations are part of SimpleTable or part of DisplayBase.
-
-need: template tag that wraps model object within formatter object. template tag needs to create new variable, use "as" syntax. if None is passed in, return a blank one with no settings, to make this code trivial.
-
-> http://docs.djangoproject.com/en/dev/howto/custom-template-tags/#setting-a-variable-in-the-context
-
-formatter object should be produced by DisplayBase, include information serialized out of DisplayFormats.
-
-Overrides __getattr__ to see if an appropriate formatter is attached. if so, produce formatted value. if not, pass through original value. "Formatted value" should be a proxy object that serializes (as __str__/__unicode__ to the cleaned version but that also includes some important settings; for example, .visible)
-> http://stackoverflow.com/questions/1466676/create-a-wrapper-class-to-call-a-pre-and-post-function-around-existing-functions/1467296#1467296
-
-Key: Figuring out how to cleanly and neatly serialize those settings into Formatter from DisplayBase without a ton of very-specific code.

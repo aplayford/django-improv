@@ -6,7 +6,7 @@
 # Implemented with getattr(models, [fieldname])
 DYN_FIELD_TYPES = (
     ('CHAR', 'CharField'),
-    ('FK', 'ForeignKey'),
+#    ('FK', 'ForeignKey'),
     ('INT', 'IntegerField'),
     ('FLOA', 'FloatField'),
     ('TEXT', 'TextField')
