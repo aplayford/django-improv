@@ -53,7 +53,7 @@ def load_and_introspect_csv(filename, model_name, repl={}, overwrite=True):
         # Cache these values here, speed up things later.
         fields[key] = {}
         fields[key]['key'] = fieldify(field)
-        fields[key]['cast'] = Cast(type)
+        fields[key]['cast'] = Cast(field_data[0])
         
         model.fields.create(column_name=fields[key]['key'], display_name=key, field_type=field_data[0], field_order=field_data[1])
     

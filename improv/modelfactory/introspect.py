@@ -84,13 +84,13 @@ def introspect_csv(filename, limit=200):
     
     with open(filename, 'rb') as csv_file: 
         for row_count, row in enumerate(DictReader(csv_file)):
-            if key < limit:
-                introspect_row(sniffer, row, order=row_count)
+            if row_count < limit:
+                introspect_row(sniffer, row)
             else:
                 break
     return sniffer
 
-def introspect_row(sniffer, row, order):
-    for (key, val) in row.items():
+def introspect_row(sniffer, row):
+    for (order, (key, val)) in enumerate(row.items()):
         sniffer.set_col(key, val, order)
 
