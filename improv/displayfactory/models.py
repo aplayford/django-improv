@@ -45,9 +45,9 @@ class StringFormat(DisplayFormat):
     trim_by = models.CharField(max_length=3, choices = (
         ('WR', 'Words'),('CH', 'Characters'))
     )
-    capitalize = models.CharField(max_length=4, choices = (
-        ('--', 'No changes'),
+    capitalize = models.CharField(max_length=3, choices = (
+        ('lev', 'No changes'),
         ('up', 'UPPERCASE'),
-        ('down', 'lowercase'),
-        ('titl', 'Title Case')
+        ('lw', 'lowercase'),
+        ('tl', 'titlecase')
     ))
