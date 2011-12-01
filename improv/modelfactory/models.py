@@ -110,6 +110,7 @@ class DynamicField(models.Model):
     class Meta:
         unique_together = ('model', 'column_name',)
         ordering = ('field_order',)
+        unique_together = (('model', 'column_name',), ('model', 'field_order'),)
 
 
 ###########################
