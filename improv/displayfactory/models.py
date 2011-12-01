@@ -43,11 +43,12 @@ class NumberFormat(DisplayFormat):
 class StringFormat(DisplayFormat):
     trim_to = models.IntegerField(blank=True)
     trim_by = models.CharField(max_length=3, choices = (
-        ('WR', 'Words'),('CH', 'Characters'))
+        ('WR', 'Words'), ('CH', 'Characters'))
     )
-    capitalize = models.CharField(max_length=3, choices = (
-        ('lev', 'No changes'),
+    capitalize = models.CharField(max_length=5, choices = (
+        ('--', 'No changes'),
         ('up', 'UPPERCASE'),
-        ('lw', 'lowercase'),
-        ('tl', 'titlecase')
+        ('down', 'lowercase'),
+        ('title', 'Title Case'),
+        ('cap1', 'Cap first'),
     ))
