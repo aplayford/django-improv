@@ -8,7 +8,7 @@ DYN_FIELD_TYPES = (
     ('CHAR', 'CharField'),
 #    ('FK', 'ForeignKey'),
     ('INT', 'IntegerField'),
-    ('FLOA', 'FloatField'),
+    ('FLOAT', 'FloatField'),
     ('TEXT', 'TextField')
 )
 

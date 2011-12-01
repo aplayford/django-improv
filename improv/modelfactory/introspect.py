@@ -4,8 +4,13 @@ from csv import DictReader
 class Introspector(object):
     def __init__(self):
         self.cols = {}
+        self.col_order = {}
     
-    def set_col(self, key, value):
+    def ordered_cols(self):
+        '''Create a dictionary that brings together cols and col_order.'''
+        return dict([(key, (self.cols[key], self.col_order[key])) for key in self.cols.keys()])
+    
+    def set_col(self, key, value, order):
         if key in self.cols:
             cast = self.cols[key]
         else:
@@ -45,6 +50,7 @@ class Introspector(object):
             cast = "TEXT"
         
         self.cols[key] = cast
+        self.col_order[key] = order
     
     def passes_char(self, value):
         if isinstance(value, basestring):
@@ -76,20 +82,15 @@ class Introspector(object):
 def introspect_csv(filename, limit=200):
     sniffer = Introspector()
     
-    rc = 0
-    f = open(filename)
-    
-    for row in DictReader(f):
-        if rc < limit:
-            introspect_row(sniffer, row)
-            rc += 1
-        else:
-            break
-
-    f.close()
-    
+    with open(filename, 'rb') as csv_file: 
+        for row_count, row in enumerate(DictReader(csv_file)):
+            if row_count < limit:
+                introspect_row(sniffer, row)
+            else:
+                break
     return sniffer
 
 def introspect_row(sniffer, row):
-    for (key, val) in row.items():
-        sniffer.set_col(key, val)
+    for (order, (key, val)) in enumerate(row.items()):
+        sniffer.set_col(key, val, order)
+

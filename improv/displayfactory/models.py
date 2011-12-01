@@ -3,7 +3,7 @@ from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 
 class DisplayPackager(models.Model):
-	pass
+    pass
     
 class DisplayBase(models.Model):
     dataset = models.ForeignKey('modelfactory.DynamicModel')
@@ -26,28 +26,28 @@ class DisplayBase(models.Model):
 
 
 class DisplayFormat(models.Model):
-	display = models.ForeignKey('DisplayBase')
-	field = models.ForeignKey('modelfactory.DynamicField', related_name="displayformats")
-	content_type = models.ForeignKey(ContentType)
-	actual_self = generic.GenericForeignKey('content_type', 'id')
+    display = models.ForeignKey('DisplayBase')
+    field = models.ForeignKey('modelfactory.DynamicField', related_name="displayformats")
+    content_type = models.ForeignKey(ContentType)
+    actual_self = generic.GenericForeignKey('content_type', 'id')
 
-	class Meta:
-		unique_together = ('display', 'field')
+    class Meta:
+        unique_together = ('display', 'field')
 
 class NumberFormat(DisplayFormat):
-	add_commas = models.BooleanField()
-	decimal_places = models.BooleanField()
-	preprint = models.CharField(max_length=50, blank=True)
-	postprint = models.CharField(max_length=50, blank=True)
+    add_commas = models.BooleanField()
+    decimal_places = models.BooleanField()
+    preprint = models.CharField(max_length=50, blank=True)
+    postprint = models.CharField(max_length=50, blank=True)
 
 class StringFormat(DisplayFormat):
-	trim_to = models.IntegerField(blank=True)
-	trim_by = models.CharField(max_length=3, choices = (
-		('WR', 'Words'),('CH', 'Characters'))
-	)
-	capitalize = models.CharField(max_length=4, choices = (
-		('--', 'No changes'),
-		('up', 'UPPERCASE'),
-		('down', 'lowercase'),
-		('titl', 'Titlecase')
-	))
+    trim_to = models.IntegerField(blank=True)
+    trim_by = models.CharField(max_length=3, choices = (
+        ('WR', 'Words'),('CH', 'Characters'))
+    )
+    capitalize = models.CharField(max_length=4, choices = (
+        ('--', 'No changes'),
+        ('up', 'UPPERCASE'),
+        ('down', 'lowercase'),
+        ('titl', 'Title Case')
+    ))

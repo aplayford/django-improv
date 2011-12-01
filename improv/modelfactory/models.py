@@ -64,7 +64,7 @@ class DynamicModel(models.Model):
     
     def table_exists(self):
         cursor = connection.cursor()
-        return self.pymodel._meta.db_table in connection.introspection.get_table_list(cursor)
+        return self.actual._meta.db_table in connection.introspection.get_table_list(cursor)
     
     def reset_table(self):
         if self.table_exists():
@@ -89,6 +89,7 @@ class DynamicField(models.Model):
     field_type = models.CharField(max_length=5, choices=DYN_FIELD_TYPES)
     display_name = models.CharField(max_length=100, blank=True)
     field_settings = models.TextField(max_length=200, blank=True)
+    field_order = models.PositiveIntegerField()
     
     @property
     def dynamic_field(self):
@@ -108,6 +109,8 @@ class DynamicField(models.Model):
     
     class Meta:
         unique_together = ('model', 'column_name',)
+        ordering = ('field_order',)
+        unique_together = (('model', 'column_name',), ('model', 'field_order'),)
 
 
 ###########################
