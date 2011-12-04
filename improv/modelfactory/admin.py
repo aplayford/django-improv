@@ -19,7 +19,7 @@ class DynamicModelAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         urls = super(DynamicModelAdmin, self).get_urls()
-        my_urls = patterns('', 
+        my_urls = patterns('',
             (r'load/csv/', self.load_and_introspect),
         )
         return my_urls + urls

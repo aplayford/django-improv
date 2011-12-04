@@ -1,5 +1,5 @@
 from django.db import models
-from displayfactory.models import DisplayBase
+from displayfactory.models import DisplayBase, DisplayField
 
 class SimpleTable(DisplayBase):
     page_title = models.CharField(max_length=100, blank=True)
@@ -11,17 +11,16 @@ class SimpleTable(DisplayBase):
         res = super(SimpleTable, self).save(*args, **kwargs)
 
         for field in self.dataset.fields.all():
-            self.columns.get_or_create(field=field)
-        
-        return res
+            self.columns.get_or_create(field=field, order=field.field_order)
 
-class SimpleColumn(models.Model):
+class SimpleColumn(DisplayField):
     table = models.ForeignKey('SimpleTable', related_name="columns")
-    field = models.ForeignKey('modelfactory.DynamicField')
+    order = models.PositiveIntegerField()
     show = models.BooleanField()
-
+    
     def __unicode__(self):
         return unicode(self.field)
 
     class Meta:
         unique_together = ('table', 'field',)
+        ordering = ('table', 'order',)
