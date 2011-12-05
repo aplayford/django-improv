@@ -1,5 +1,5 @@
 import re
-from csv import DictReader
+from utils import OrderedDictReader
 from collections import OrderedDict
 
 class Introspector(object):
@@ -84,7 +84,7 @@ def introspect_csv(filename, limit=200):
     sniffer = Introspector()
     
     with open(filename, 'rb') as csv_file: 
-        for row_count, row in enumerate(DictReader(csv_file)):
+        for row_count, row in enumerate(OrderedDictReader(csv_file)):
             if row_count < limit:
                 introspect_row(sniffer, row)
             else:
