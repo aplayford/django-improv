@@ -105,7 +105,7 @@ class DynamicField(models.Model):
         return getattr(models, field_type)(**settings)
     
     def __unicode__(self):
-        return "%s" % self.display_name if self.display_name else self.column_name
+        return u"%s" % self.display_name if self.display_name else self.column_name
     
     class Meta:
         unique_together = ('model', 'column_name',)
