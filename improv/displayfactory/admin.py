@@ -2,5 +2,10 @@ from django.contrib import admin
 
 from displayfactory.models import DisplayFormat, NumberFormat, StringFormat
 
-admin.site.register(NumberFormat)
-admin.site.register(StringFormat)
+class NumberFormatAdmin(admin.ModelAdmin):
+    exclude = ('content_type',)
+class StringFormatAdmin(admin.ModelAdmin):
+    exclude = ('content_type',)
+
+admin.site.register(NumberFormat, NumberFormatAdmin)
+admin.site.register(StringFormat, StringFormatAdmin)
