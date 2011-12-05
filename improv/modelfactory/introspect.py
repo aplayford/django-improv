@@ -83,7 +83,7 @@ class Introspector(object):
 def introspect_csv(filename, limit=200):
     sniffer = Introspector()
     
-    with open(filename, 'rb') as csv_file: 
+    with open(filename, 'rb') as csv_file:
         for row_count, row in enumerate(OrderedDictReader(csv_file)):
             if row_count < limit:
                 introspect_row(sniffer, row)
@@ -92,8 +92,6 @@ def introspect_csv(filename, limit=200):
     return sniffer
 
 def introspect_row(sniffer, row):
-    ## Error! This line is broken. By the time a row is created, the order's already been lost to history,
-    ## courtsey of DictReader. As such, this doesn't give us the order we need.
     for (order, (key, val)) in enumerate(row.items()):
         sniffer.set_col(key, val, order)
 

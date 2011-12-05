@@ -3,7 +3,7 @@ from modelfactory.models import DynamicModel, DynamicField
 from django.template.defaultfilters import slugify
 
 import codecs
-from csv import DictReader
+from utils import OrderedDictReader
 
 ## TODOs:
 ## 1) Fix error that would come if two fieldify() fields created an overlap.
@@ -64,7 +64,7 @@ def load_and_introspect_csv(filename, model_name, repl={}, overwrite=True):
 def load_csv(model, filename, fields, repl={}):
     f = codecs.open(filename)
     
-    for row in DictReader(f):
+    for row in OrderedDictReader(f):
         load_row(model, row, fields, repl)
     
     f.close()
