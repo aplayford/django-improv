@@ -1,7 +1,13 @@
-An experimental Django project to deploy data from csvs onto the internet without requiring expensive programming.
+h1. Django-improv
+An experimental Django project to deploy data from CSV files onto the internet.
 
-This may work or it may not! Key features about what we're trying:
-* We want to use Django's powerful template language within the admin site, to make it really easy to lay out a page. This is also a clever trick to help your web producers learn Django (at least the templating).
-* Django models can be generated dynamically, in memory, based on meta-data stored in the database. Those models can be sync'd themselves into the database with south. (In this case, we're just using south as a pretty version of syncdb, but that's OK, because south's internal API *is* prettier than syncdb's internal API.)
-* Being able to _change data over time_ is not as important as being able to easily upload/replace. (That's good, because *changing* data with south is a lot harder than just syncing a database into place.)
+Right now, it's just the basics -- upload a file, format the columns and spit out a table. But adding new ways to visualize your data is as simple as writing a quick Django app that follows a few rules.
+
+h2. Here's how it works.
+Django models are usually written into models.py files by developers. But it's also possible to generate them dynamically in memory, based on information stored in the database.
+Once a Model object exists in memory, South:http://south.aeracode.org/, the popular migrations library, can create a database table to match. That's our sweet spot.
+
+h3. What's up next.
+* We want to add more templates, including some that let producers design pages within the admin site in Django's powerful template language. This makes it really easy to lay out a fancy page. (It's also also a clever trick to nudge web producers to dip their toes into Django templates.)
 * Since this is a database-backed solution (not a javascript/json gig), we should be able to handle really-big datasets. But that's not a key feature for version 1; most data that newspapers want to publish is pretty small (a few thousand rows), so let's start there.
+* Ultimately, because we're relying on South's API, it should be possible to change the database layout dynamically to add and drop columns. But that's tricky and leads us down some messy roads, so for now, we're not going to focus on changing data over time. (We will add code to replace a database in place, which for most quick-hit web projects is enough.)
