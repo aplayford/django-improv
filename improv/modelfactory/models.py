@@ -1,6 +1,8 @@
 from django.db import models, connection
 from django.core.validators import RegexValidator
 
+from collections import OrderedDict
+
 from south.db import db as southdb
 
 from modelfactory.supported_fields import DYN_FIELD_TYPES, DYN_FIELD_DEFAULTS
@@ -20,7 +22,7 @@ class DynamicModel(models.Model):
     ## Getters ##
     #############
     def fields_actual(self):
-        res = {}
+        res = OrderedDict()
         for field in self.fields.all():
             res[field.column_name] = field.dynamic_field
         return res
@@ -34,7 +36,7 @@ class DynamicModel(models.Model):
         """
         
         dynamic = {
-            'dynamic_fields': dict([(f.column_name, f) for f in self.fields.all()])
+            'dynamic_fields': OrderedDict([(f.column_name, f) for f in self.fields.all()])
         }
         
         return instance_dynamic_model(
@@ -45,9 +47,9 @@ class DynamicModel(models.Model):
             dynamic,
         )
     
-    ####################################
-    ## Database manipulation methods. ##
-    ####################################
+    ###########################
+    ## Database manipulation ##
+    ###########################
     
     def create_table(self):
         model = self.actual
@@ -71,9 +73,9 @@ class DynamicModel(models.Model):
             self.drop_table()
         return self.create_table()
     
-    ##########################
-    ## Django model methods ##
-    ##########################
+    ############################
+    ## Django model overrides ##
+    ############################
     
     def delete(self, *args, **kwargs):
         if self.table_exists():
@@ -118,14 +120,17 @@ class DynamicField(models.Model):
 ###########################
 
 class DynamicModelManager(models.Manager):
-    def row_iterator(self, exclude=[]):
+    def formatted_rows(self, formatter, exclude=None):
+        if not exclude:
+            exclude = []
+        
         for row in self.iterator():
-            rowdata = {}
-            for val in self.model._meta.fields:
-                if not val in exclude:
-                    rowname = val.name
-                    rowdata[rowname] = getattr(row, rowname)
+            rowdata = OrderedDict()
+            for key, field in self.model.Dynamic['dynamic_fields'].items():
+                if not key in exclude:
+                    rowdata[key] = formatter.wrap_value(field, getattr(row, key))
             yield rowdata
+            
 
 class DynamicModelBase(models.Model):
     """
@@ -144,8 +149,7 @@ def instance_dynamic_model(name, fields, app_label, module, dynamic_data=None, o
     """
     Using metadata that describes a model, instance it in-memory.
     
-    Code based on
-    http://code.djangoproject.com/wiki/DynamicModels.
+    Code based on http://code.djangoproject.com/wiki/DynamicModels.
     """
     class Meta:
         pass # Using type('Meta', ...) gives a dictproxy error during model creation

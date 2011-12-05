@@ -9,12 +9,12 @@ class SimpleTable(DisplayBase):
 
     def save(self, *args, **kwargs):
         res = super(SimpleTable, self).save(*args, **kwargs)
-
         for field in self.dataset.fields.all():
             self.columns.get_or_create(field=field, order=field.field_order)
+        return res
 
 class SimpleColumn(DisplayField):
-    table = models.ForeignKey('SimpleTable', related_name="columns")
+    table = models.ForeignKey('SimpleTable', related_name="fields")
     order = models.PositiveIntegerField()
     show = models.BooleanField()
     

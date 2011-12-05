@@ -1,10 +1,11 @@
 import re
 from csv import DictReader
+from collections import OrderedDict
 
 class Introspector(object):
     def __init__(self):
-        self.cols = {}
-        self.col_order = {}
+        self.cols = OrderedDict()
+        self.col_order = OrderedDict()
     
     def ordered_cols(self):
         '''Create a dictionary that brings together cols and col_order.'''

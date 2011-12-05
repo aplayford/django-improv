@@ -7,6 +7,7 @@ class SimpleColumnInline(admin.StackedInline):
     model = SimpleColumn
 
 class SimpleTableAdmin(admin.ModelAdmin):
+    exclude = ('content_type',)
     inlines = [SimpleColumnInline]
 
 admin.site.register(SimpleTable, SimpleTableAdmin)
