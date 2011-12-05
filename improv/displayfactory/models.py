@@ -19,7 +19,7 @@ class Formatter(object):
                 self.field = field
                 try:
                     self.display_field = fields[field]
-                except ObjectDoesNotExist:
+                except KeyError:
                     self.display_field = None
                 self.val = val
             
