@@ -1,13 +1,15 @@
 h1. Django-improv
-An experimental Django project to deploy data from CSV files onto the internet.
 
-Right now, it's just the basics -- upload a file, format the columns and spit out a table. But adding new ways to visualize your data is as simple as writing a quick Django app that follows a few rules.
+_An experimental Django project to deploy data from CSV files onto the internet. By news app developers, for news app developers. Because doing our jobs well should be fun._
 
-h2. Here's how it works.
+h2. Here's how it works
+
 Django models are usually written into models.py files by developers. But it's also possible to generate them dynamically in memory, based on information stored in the database.
 Once a Model object exists in memory, South:http://south.aeracode.org/, the popular migrations library, can create a database table to match. That's our sweet spot.
+Right now, our code covers just the basics -- upload a file, format the columns and spit out a table. But adding new ways to visualize your data is as simple as writing a quick Django app that follows a few rules.
 
-h3. What's up next.
+h3. What's up next
+
 * We want to add more templates, including some that let producers design pages within the admin site in Django's powerful template language. This makes it really easy to lay out a fancy page. (It's also also a clever trick to nudge web producers to dip their toes into Django templates.)
 * Since this is a database-backed solution (not a javascript/json gig), we should be able to handle really-big datasets. But that's not a key feature for version 1; most data that newspapers want to publish is pretty small (a few thousand rows), so let's start there.
 * Ultimately, because we're relying on South's API, it should be possible to change the database layout dynamically to add and drop columns. But that's tricky and leads us down some messy roads, so for now, we're not going to focus on changing data over time. (We will add code to replace a database in place, which for most quick-hit web projects is enough.)
