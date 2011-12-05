@@ -25,4 +25,5 @@ h2. What's up next
 
 
 fn1. In this case, South is basically just a thin wrapper around syncdb. But it's a much prettier API, and the software provides other functionality we'll use down the road.
+
 fn2. This is also a clever, insidious scheme to trick web producers into dipping their toes into Django templating.
