@@ -31,8 +31,11 @@ class Cast(object):
     def char(self, v):
         return unicode(v, errors="ignore")
 
-def load_and_introspect_csv(filename, model_name, repl={}, overwrite=True):
+def load_and_introspect_csv(filename, model_name, repl=None, overwrite=True):
     sniffed = introspect_csv(filename)
+    
+    if repl is None:
+        repl = {}
 
     if overwrite:
         try:
@@ -61,16 +64,23 @@ def load_and_introspect_csv(filename, model_name, repl={}, overwrite=True):
     
     load_csv(model, filename, fields, repl)
 
-def load_csv(model, filename, fields, repl={}):
+def load_csv(model, filename, fields, repl=None):
     f = codecs.open(filename)
+    
+    if repl is None:
+        repl = {}
+
     
     for row in OrderedDictReader(f):
         load_row(model, row, fields, repl)
     
     f.close()
     
-def load_row(model, row, fields, repl={}):
+def load_row(model, row, fields, repl=None):
     obj = model.actual()
+    
+    if repl is None:
+        repl = {}
     
     for (key, val) in row.items():
         if key in repl:
