@@ -7,6 +7,18 @@ class Introspector(object):
         self.cols = OrderedDict()
         self.col_order = OrderedDict()
     
+    def from_stream(self, stream, limit=None):
+        for row_count, row in enumerate(OrderedDictReader(stream)):
+            if limit is None or row_count < limit:
+                self.introspect_row(row)
+            else:
+                break
+        return self
+    
+    def introspect_row(self, row):
+        for (order, (key, val)) in enumerate(row.items()):
+            self.set_col(key, val, order)
+    
     def ordered_cols(self):
         '''Create a dictionary that brings together cols and col_order.'''
         return dict([(key, (self.cols[key], self.col_order[key])) for key in self.cols.keys()])
@@ -79,19 +91,3 @@ class Introspector(object):
             return True
         except ValueError:
             return False
-    
-def introspect_csv(filename, limit=200):
-    sniffer = Introspector()
-    
-    with open(filename, 'rb') as csv_file:
-        for row_count, row in enumerate(OrderedDictReader(csv_file)):
-            if row_count < limit:
-                introspect_row(sniffer, row)
-            else:
-                break
-    return sniffer
-
-def introspect_row(sniffer, row):
-    for (order, (key, val)) in enumerate(row.items()):
-        sniffer.set_col(key, val, order)
-
