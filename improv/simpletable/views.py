@@ -15,9 +15,8 @@ def render_table(request, id, slug):
     
     varsContext = {
         'display': table,
-        'proxy': dynamic_model,
         'model': actual_model,
-        'rows': actual_model.objects.formatted_rows(table.get_formatter())
+        'rows': actual_model.objects.formatted_rows(table.get_formatter(), exclude=[f.field.column_name for f in table.fields.all() if not f.show])
     }
     
     return render_to_response("simpletable/simpletable.html", varsContext,

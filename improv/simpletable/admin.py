@@ -1,7 +1,7 @@
 from django.contrib import admin
 from simpletable.models import SimpleTable, SimpleColumn
 
-class SimpleColumnInline(admin.StackedInline):
+class SimpleColumnInline(admin.TabularInline):
     exclude = ('field',)
     extra = 0
     model = SimpleColumn

@@ -19,10 +19,7 @@ class SimpleTable(DisplayBase):
 class SimpleColumn(DisplayField):
     table = models.ForeignKey('SimpleTable', related_name="fields")
     order = models.PositiveIntegerField()
-    show = models.BooleanField()
-    
-    def __unicode__(self):
-        return unicode(self.field)
+    show = models.BooleanField(default=True)
 
     class Meta:
         unique_together = ('table', 'field',)

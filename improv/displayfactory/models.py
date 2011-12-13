@@ -76,6 +76,11 @@ class DisplayField(models.Model):
     label = models.CharField(max_length=50, blank=True)
     field = models.ForeignKey('modelfactory.DynamicField')
     
+    def __unicode__(self):
+        if(self.label):
+            return self.label
+        return unicode(self.field)
+    
     class Meta:
         abstract = True
 

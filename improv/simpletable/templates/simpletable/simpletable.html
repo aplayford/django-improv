@@ -5,8 +5,10 @@
 {% if display.leadin %}<p>{{display.leadin}}</p>{% endif %}
 <table>
     <thead><tr>
-    {% for th in proxy.fields.all %}
+    {% for th in display.fields.all %}
+        {% if th.show %}
         <th>{{th}}</th>
+        {% endif %}
     {% endfor %}
     </tr></thead>
     
