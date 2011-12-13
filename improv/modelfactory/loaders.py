@@ -6,10 +6,6 @@ import codecs
 from io import StringIO
 from utils import OrderedDictReader
 
-## TODOs:
-## 1) Fix error that would come if two fieldify() fields created an overlap.
-## 2) Handle unicode correctly. Errors="ignore" is a *really* bad solution.
-
 def fieldify(txt):
     return slugify(txt).replace('-', '_')
 
@@ -90,6 +86,8 @@ class Loader(object):
         model.save()
         self.assign_model(model)
         
+        used_fields = set()
+        
         for (field, field_data) in sniffed.ordered_cols().items():
             try:
                 key = repl[field]
@@ -97,8 +95,16 @@ class Loader(object):
                 key = field
             
             # Cache these values here, speed up things later.
+            fieldname = fieldify(field)
+            if fieldname in used_fields:
+                ct = 1
+                while fieldname in used_fields:
+                    fieldname = u"%s%s" % (fieldname, ct)
+                    ct += 1
+            used_fields.add(fieldname)
+            
             self.fields[key] = {}
-            self.fields[key]['key'] = fieldify(field)
+            self.fields[key]['key'] = fieldname
             self.fields[key]['cast'] = Cast(field_data[0])
             
             model.fields.create(column_name=self.fields[key]['key'], display_name=key, field_type=field_data[0], field_order=field_data[1])
