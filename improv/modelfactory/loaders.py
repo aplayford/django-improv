@@ -29,10 +29,14 @@ class Cast(object):
         return unicode(v, errors="ignore")
 
 class Loader(object):
-    def __init__(self, model=None):
+    def __init__(self, model=None, **kwargs):
         self.model = model
         self.streamer = None
         self.fields = {}
+        if 'file' in kwargs:
+            self.open_file_stream(kwargs['file'])
+        elif 'text' in kwargs:
+            self.open_text_stream(kwargs['text'])
     def __del__(self):
         if hasattr(self, "fileobj"):
             self.fileobj.close()
