@@ -3,12 +3,17 @@ from utils import OrderedDictReader
 from collections import OrderedDict
 
 class Introspector(object):
-    def __init__(self):
+    def __init__(self, **kwargs):
         self.cols = OrderedDict()
         self.col_order = OrderedDict()
+        
+        if 'reader_settings' in kwargs:
+            self.reader_settings = kwargs['reader_settings']
+        else:
+            self.reader_settings = {}
     
     def from_stream(self, stream, limit=None):
-        for row_count, row in enumerate(OrderedDictReader(stream)):
+        for row_count, row in enumerate(OrderedDictReader(stream, **self.reader_settings)):
             if limit is None or row_count < limit:
                 self.introspect_row(row)
             else:

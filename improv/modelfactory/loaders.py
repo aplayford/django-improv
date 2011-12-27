@@ -4,7 +4,7 @@ from django.template.defaultfilters import slugify
 
 import codecs
 from io import StringIO
-from utils import OrderedDictReader
+from utils import OrderedDictReader, utfify
 
 def fieldify(txt):
     return slugify(txt).replace('-', '_')
@@ -26,13 +26,19 @@ class Cast(object):
         return v.replace(",", "")
     
     def char(self, v):
-        return unicode(v, errors="ignore")
+        return v
 
 class Loader(object):
     def __init__(self, model=None, **kwargs):
         self.model = model
         self.streamer = None
         self.fields = {}
+        
+        if 'reader_settings' in kwargs:
+            self.reader_settings = kwargs['reader_settings']
+        else:
+            self.reader_settings = {}
+        
         if 'file' in kwargs:
             self.open_file_stream(kwargs['file'])
         elif 'text' in kwargs:
@@ -71,14 +77,12 @@ class Loader(object):
     ## Introspection ##
     ###################
     
-    def introspect_stream(self, model_name, repl=None, reader_settings=None, overwrite=False):
-        sniffed = Introspector().from_stream(self.get_stream())
+    def introspect_stream(self, model_name, repl=None, overwrite=False):
+        sniffed = Introspector(reader_settings=self.reader_settings).from_stream(self.get_stream())
         self.reset_stream()
         
         if repl is None:
             repl = {}
-        if reader_settings is None:
-            reader_settings = {}
     
         if overwrite:
             try:
@@ -119,10 +123,8 @@ class Loader(object):
     ## Loading ##
     #############
     
-    def load_stream(self, reader_settings=None, **kwargs):
-        if reader_settings is None:
-            reader_settings = {}
-        for row in OrderedDictReader(self.get_stream(), **reader_settings):
+    def load_stream(self, **kwargs):
+        for row in OrderedDictReader(self.get_stream(), **self.reader_settings):
             self.load_row(row, **kwargs)
     
     def load_row(self, row, repl=None):
@@ -150,18 +152,16 @@ class Loader(object):
     ############
     ## cutoff ##
     ############
-    def load_and_introspect_csv(self, filename, model_name, repl=None, reader_settings=None, overwrite=True):
+    def load_and_introspect_csv(self, filename, model_name, repl=None, overwrite=True):
         self.open_file_stream(filename)
-        self.introspect_stream(model_name, reader_settings=reader_settings, overwrite=overwrite)
-        self.load_stream(repl)
+        self.introspect_stream(model_name, overwrite=overwrite)
+        self.load_stream(repl=repl)
     
-    def load_and_introspect_tsv_text(self, filename, model_name, repl=None, reader_settings=None, overwrite=True):
+    def load_and_introspect_tsv_text(self, text, model_name, repl=None, overwrite=True):
         from csv import excel_tab
         
-        if reader_settings is None:
-            reader_settings = {}
-        reader_settings['dialect'] = excel_tab
+        self.reader_settings['dialect'] = excel_tab
         
-        self.open_file_stream(filename)
-        self.introspect_stream(model_name, reader_settings=reader_settings, overwrite=overwrite)
-        self.load_stream(repl)
+        self.open_text_stream(text)
+        self.introspect_stream(model_name, overwrite=overwrite)
+        self.load_stream(repl=repl)

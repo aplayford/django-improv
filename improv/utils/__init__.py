@@ -1,11 +1,29 @@
 from csv import DictReader
 from collections import OrderedDict
 
+def utfify(stream):
+    '''Convert a stream into utf-8.'''
+    for l in stream:
+        yield l.encode('utf-8')
+
+def deutfify(stream):
+    '''Convert a stream out of utf-8.'''
+    for l in stream:
+        yield l.decode('utf-8')
+
+
 class OrderedDictReader(DictReader):
     '''
-    A quick rip of csv.DictReader to replace dict with OrderedDict. For now, code is wholly
+    A quick rip of csv.DictReader to replace dict with OrderedDict. For now, code is mostly
     borrowed from Python core.
     '''
+    def __init__(self, *args, **kwargs):
+        
+        args = list(args)
+        args[0] = utfify(args[0])
+        
+        DictReader.__init__(self, *args, **kwargs) #  DictReader is apparently an old-style  class
+    
     def next(self):
         if self.line_num == 0:
             # Used only for its side effect.
@@ -18,7 +36,7 @@ class OrderedDictReader(DictReader):
         # values
         while row == []:
             row = self.reader.next()
-        d = OrderedDict(zip(self.fieldnames, row))
+        d = OrderedDict(zip(self.fieldnames, deutfify(row)))
         lf = len(self.fieldnames)
         lr = len(row)
         if lf < lr:
