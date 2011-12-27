@@ -141,6 +141,7 @@ class DynamicModelBase(models.Model):
     def __unicode__(self):
         if hasattr(self, "magic_box"):
             return getattr(self, self.magic_box['unicode_val'])
+        return u"unnamed object"
     
     class Meta:
         abstract = True
