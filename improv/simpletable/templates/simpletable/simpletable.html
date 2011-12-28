@@ -1,6 +1,11 @@
 {% extends "displayfactory/base.html" %}
 
-{% block content_well %}
+{% block headContent %}
+    {{block.super}}
+    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.4.0/bootstrap.min.css">
+{% endblock headContent %}
+
+{% block bodyContent %}
 {% if display.page_title %}<h1>{{display.page_title}}</h1>{% endif %}
 {% if display.leadin %}<p>{{display.leadin}}</p>{% endif %}
 <table>
@@ -22,4 +27,4 @@
     {% endfor %}
     </tbody>
 </table>
-{% endblock content_well %}
+{% endblock bodyContent %}

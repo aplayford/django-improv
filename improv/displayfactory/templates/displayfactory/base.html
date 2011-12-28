@@ -1,2 +1,13 @@
-{% block content_well %}
-{% endblock content_well %}
+
+<html>
+	<head>
+        {% block headContent %}
+    		<title>{% block headTitle %}{% endblock %}</title>
+    		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		{% endblock headContent %}
+	</head>
+	<body>
+        {% block bodyContent %}
+        {% endblock bodyContent %}
+	</body>
+</html>
