@@ -17,7 +17,7 @@ Django models are usually written into models.py files by programmers. But becau
 Improv's second half is called *DisplayFactory*: A library that nests neatly alongside ModelFactory, making it easy to dream up new reusable visualizations. DisplayFactories are encapsulated in a slim reusable Django apps, and the main DisplayFactory library handles the messy bits for you, like formatting dollar figures differently from percents. You can start with an open-source DisplayFactory -- several are bundled with improv -- then move up to building your own, to show your newsroom's data the way your newsroom likes it.
 
 
-h2. What's up next
+h3. What's up next
 
 At this point, improv is basically a proof of concept, but we're hoping it can be rapidly developed into a more stable product. Here's what's up next:
  
@@ -25,7 +25,7 @@ At this point, improv is basically a proof of concept, but we're hoping it can b
 * Since this is a database-backed solution (not a purely JSON gig), we should be able to handle really big datasets. But that's not a key feature for version 1; most data that newspapers want to publish is pretty small (a few thousand rows), so let's start there.
 * Ultimately, because we're relying on South's API, it should be possible to make changes to the database schema (adding/dropping columns) point and click. But that's tricky and leads us down some messy roads, so for now, we're not going to focus on changing data once it's uploaded. (More quickly, we'll add code to replace a database in place, which should be enough for most projects.)
 
-h2. Want to help?
+h3. Want to help?
 
 Send a note to Adam, grab a ticket, and dig in!
 
