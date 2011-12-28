@@ -1,18 +1,18 @@
 h1. django-improv
 
-_An experimental Django project to deploy data from CSV files onto the internet. By news app developers, for news app developers. Because doing our jobs well should be fun._
+_An experimental Django project to deploy data onto the internet. By news app developers, for news app developers._
 
 
 h2. Here's the pitch
 
-Improv aims at the gray area between what a programmer can do and what a web producer can do. You shouldn't need to learn to program to put a csv online. On the other hand, if the only beautiful ways to show off your data requires starting from the scratch, even newsrooms that have programmers will find their ambition limited by the hours in the day.
+Improv aims at the gray area between what a programmer can do and what a web producer can do. You shouldn't need to learn to program to put a csv online. On the other hand, if every beautiful way to show off your data requires starting from the scratch, even newsrooms that have programmers will find their ambition limited by the hours in the day.
 
 Enter django-improv, a framework for data. Uploading data is point and click, as is putting it online. Visualizations are flexible -- defined in code, but usable by non-programmers. Quick and easy shouldn't mean bad; with improv, it doesn't.
 
 
-h2. Under the hood
+h3. Under the hood
 
-Django models are usually written into models.py files by programmers. But because Django's just Python, it's actually possible to generate models dynamically in memory, based on information stored in a database. Once a Model object exists in memory, "South":http://south.aeracode.org/, the popular migrations library, can create a database table to match[1]. Improv's core *ModelFactory* library does exactly that, giving you the power of a real database and Django's pretty API without the mess of writing a thicket of models files for even the smallest projects.
+Django models are usually written into models.py files by programmers. But because Django's just Python, it's actually possible to generate models on-the-fly in memory, based on information stored in a database. Once a Model object exists in memory, "South":http://south.aeracode.org/, the popular migrations library, can create a database table to match[1]. That's how Improv's core *ModelFactory* library works, giving you the power of a real database and Django's pretty API without the mess of writing a thicket of models files for even the smallest projects.
 
 Improv's second half is called *DisplayFactory*: A library that nests neatly alongside ModelFactory, making it easy to dream up new reusable visualizations. DisplayFactories are encapsulated in a slim reusable Django apps, and the main DisplayFactory library handles the messy bits for you, like formatting dollar figures differently from percents. You can start with an open-source DisplayFactory -- several are bundled with improv -- then move up to building your own, to show your newsroom's data the way your newsroom likes it.
 
@@ -23,13 +23,13 @@ At this point, improv is basically a proof of concept, but we're hoping it can b
  
 * We want to add more DisplayFactories, including some that let producers design pages within the admin site in Django's powerful template language. This makes it really easy to lay out a fancy page.[2]
 * Since this is a database-backed solution (not a purely JSON gig), we should be able to handle really big datasets. But that's not a key feature for version 1; most data that newspapers want to publish is pretty small (a few thousand rows), so let's start there.
-* Ultimately, because we're relying on South's API, it should be possible to make changes to the database schema (adding/dropping columns) point and click. But that's tricky and leads us down some messy roads, so for now, we're not going to focus on changing data once it's uploaded. (More quickly, we'll add code to replace a database in place, which should be enough for most projects.)
+* Because we're relying on South's API, it should eventually be possible to make adding, dropping and changing columns point and click. But that's tricky and leads us down some messy roads, so for now, we're not going to focus on changing data once it's uploaded. We'll add code to replace a database in place, which should be enough for most projects.
 
 h3. Want to help?
 
-Send a note to Adam, grab a ticket, and dig in!
+Send a note to Adam, grab a ticket and dig in!
 
 
-fn1. In this case, South is basically just a thin wrapper around syncdb. But it's a much prettier API, and the software provides other functionality we'll use down the road.
+fn1. In this case, South is basically just a thin wrapper around syncdb. But it's a much prettier API, and the library provides other features we'll use down the road.
 
 fn2. This is also a clever, insidious scheme to trick web producers into dipping their toes into Django templating.
