@@ -99,11 +99,6 @@ INSTALLED_APPS = (
     'improv.modelfactory',
     'improv.displayfactory',
     
-    #########################
-    ## 'Dirty' helper apps ##
-    #########################
-    'improv.easyloader',
-    
     ###########################
     ## Pluggable output apps ##
     ###########################
