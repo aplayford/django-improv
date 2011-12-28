@@ -118,6 +118,8 @@ class Loader(object):
             model.fields.create(column_name=self.fields[key]['key'], display_name=key, field_type=field_data[0], field_order=field_data[1])
         
         model.create_table()
+        self.dynamicmodel = model
+        return model
     
     #############
     ## Loading ##
@@ -165,3 +167,5 @@ class Loader(object):
         self.open_text_stream(text)
         self.introspect_stream(model_name, overwrite=overwrite)
         self.load_stream(repl=repl)
+        
+        return self.dynamicmodel

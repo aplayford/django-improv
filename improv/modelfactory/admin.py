@@ -7,6 +7,7 @@ from django.conf.urls.defaults import patterns
 from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.core.urlresolvers import reverse
 
 class DynamicFieldInline(admin.StackedInline):
     model = DynamicField
@@ -21,7 +22,7 @@ class DynamicModelAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(DynamicModelAdmin, self).get_urls()
         my_urls = patterns('',
-            (r'load/tsv/', self.load_and_introspect_tsv),
+            (r'load/', self.load_and_introspect_tsv),
         )
         return my_urls + urls
 
@@ -33,7 +34,7 @@ class DynamicModelAdmin(admin.ModelAdmin):
             if form.is_valid(): # All validation rules pass
                 loader = Loader()
                 dyn_mod = loader.load_and_introspect_tsv_text(form.cleaned_data['tsv_data'], form.cleaned_data['model_name'], overwrite=True)
-                return HttpResponseRedirect('/thanks/') # Redirect after POST
+                return HttpResponseRedirect(reverse('admin:modelfactory_dynamicmodel_change', args=[dyn_mod.id] )) # Redirect after POST
         else:
             form = EasyLoadTextForm() # An unbound form
 
