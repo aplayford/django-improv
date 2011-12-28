@@ -1,8 +1,10 @@
 {% extends "admin/base_site.html" %}
 
 {% block content %}
-<form method="post"> <!-- enctype="multipart/form-data" method="post" action="/foo/"> -->
-{{form}}
+
+<p>Copy and paste data from Microsoft Excel into the form below to upload it into the system.</p>
+<form method="post">
+{{form.as_p}}
 {% csrf_token %}
 <input type="submit">
 </form>
