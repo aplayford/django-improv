@@ -10,7 +10,7 @@ Improv aims at the gray area between what a programmer can do and what a web pro
 Enter django-improv, a framework for data. Uploading data is point and click, as is putting it online. Visualizations are flexible -- defined in code, but usable by non-programmers. Quick and easy shouldn't mean bad; with improv, it doesn't.
 
 
-h3. Under the hood
+h2. Under the hood
 
 Django models are usually written into models.py files by programmers. But because Django's just Python, it's actually possible to generate models dynamically in memory, based on information stored in a database. Once a Model object exists in memory, "South":http://south.aeracode.org/, the popular migrations library, can create a database table to match[1]. Improv's core *ModelFactory* library does exactly that, giving you the power of a real database and Django's pretty API without the mess of writing a thicket of models files for even the smallest projects.
 
@@ -19,9 +19,15 @@ Improv's second half is called *DisplayFactory*: A library that nests neatly alo
 
 h2. What's up next
 
+At this point, improv is basically a proof of concept, but we're hoping it can be rapidly developed into a more stable product. Here's what's up next:
+ 
 * We want to add more DisplayFactories, including some that let producers design pages within the admin site in Django's powerful template language. This makes it really easy to lay out a fancy page.[2]
 * Since this is a database-backed solution (not a purely JSON gig), we should be able to handle really big datasets. But that's not a key feature for version 1; most data that newspapers want to publish is pretty small (a few thousand rows), so let's start there.
 * Ultimately, because we're relying on South's API, it should be possible to make changes to the database schema (adding/dropping columns) point and click. But that's tricky and leads us down some messy roads, so for now, we're not going to focus on changing data once it's uploaded. (More quickly, we'll add code to replace a database in place, which should be enough for most projects.)
+
+h2. Want to help?
+
+Send a note to Adam, grab a ticket, and dig in!
 
 
 fn1. In this case, South is basically just a thin wrapper around syncdb. But it's a much prettier API, and the software provides other functionality we'll use down the road.
