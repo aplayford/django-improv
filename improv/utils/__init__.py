@@ -1,5 +1,5 @@
 from csv import DictReader
-from collections import OrderedDict
+from utils.ordered_dict import OrderedDict # For pre-Python 2.7 compatability
 
 def utfify(stream):
     '''Convert a stream into utf-8.'''
@@ -10,7 +10,6 @@ def deutfify(stream):
     '''Convert a stream out of utf-8.'''
     for l in stream:
         yield l.decode('utf-8')
-
 
 class OrderedDictReader(DictReader):
     '''
