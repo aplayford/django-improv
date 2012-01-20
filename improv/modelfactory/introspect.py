@@ -1,6 +1,5 @@
 import re
-from utils import OrderedDictReader
-from collections import OrderedDict
+from utils import OrderedDict, OrderedDictReader
 
 class Introspector(object):
     def __init__(self, **kwargs):

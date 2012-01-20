@@ -1,7 +1,7 @@
 from django.db import models, connection
 from django.core.validators import RegexValidator
 
-from collections import OrderedDict
+from utils import OrderedDict
 
 from south.db import db as southdb
 
